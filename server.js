@@ -33,6 +33,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({ status: 'OK', message: 'UdayTechX API is running', version: '1.0.0' });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'AntiGravity Shop API is running' });
