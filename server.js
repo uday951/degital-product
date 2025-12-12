@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const fetch = require('node-fetch');
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
@@ -36,6 +37,14 @@ app.use('/api/orders', orderRoutes);
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'AntiGravity Shop API is running' });
 });
+
+// Self-ping to prevent sleep
+setInterval(() => {
+  const url = process.env.RENDER_EXTERNAL_URL || 'https://degital-product.onrender.com';
+  fetch(`${url}/api/health`)
+    .then(() => console.log('Self-ping successful'))
+    .catch(() => console.log('Self-ping failed'));
+}, 5 * 60 * 1000); // Every 5 minutes
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
